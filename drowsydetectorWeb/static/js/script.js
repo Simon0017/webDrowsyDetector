@@ -141,6 +141,29 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 }
 
 ws.onmessage = function(e) {
-  const data = JSON.parse(e.data);
-  console.log(data);
+  // const data = JSON.parse(e.data);
+  // console.log(data);
+  const arrayBuffer = e.data; // Received ArrayBuffer
+  const blob = new Blob([arrayBuffer], { type: 'image/jpeg' }); // Convert to Blob
+  
+  const img = new Image(); // Create a new Image object
+  const canvas_R = document.getElementById('canvas_R');
+  const ctx_R = canvas_R.getContext('2d');
+  
+  // When the image is loaded, draw it on the canvas
+  img.onload = function() {
+      ctx_R.drawImage(img, 0, 0, canvas.width, canvas.height);
+  };
+  
+  // Set the source of the image to the Blob URL
+  img.src = URL.createObjectURL(blob);
+
+  const ReceivedStream = canvas_R.captureStream(30);
+  const videoStream_R = new MediaStream();
+  videoStream_R.addTrack(ReceivedStream.getVideoTracks()[0]);
+
+  // const videoElement = document.getElementById('video');
+  // videoElement.srcObject = videoStream_R;
+
+
 }

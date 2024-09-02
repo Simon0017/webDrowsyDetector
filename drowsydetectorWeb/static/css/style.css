@@ -314,6 +314,14 @@ body.dark .btn-close-right {
   height: 100%;
   object-fit: cover;
 }
+
+.video-participant img{
+  width: 30%;
+  height: 50%;
+  object-fit: cover;
+  top: 0;
+  right: 0;
+}
 .name-tag {
   position: absolute;
   bottom: 12px;

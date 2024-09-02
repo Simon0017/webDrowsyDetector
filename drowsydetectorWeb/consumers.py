@@ -9,7 +9,7 @@ import numpy as np
 import cv2
 
 # models
-face_detector=cv2.CascadeClassifier('C:/Users/wekes/OneDrive/Documents/PROJECTS/WebDrowsyDetector/Web/drowsydetector/drowsydetector/haarcascade_frontalface_default.xml')
+face_detector=cv2.CascadeClassifier('drowsydetector/haarcascade_frontalface_default.xml')
 
 class ImageClassifierConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -32,10 +32,14 @@ class ImageClassifierConsumer(AsyncWebsocketConsumer):
                     print(f'system has detected {len(faces)} no of faces')
                 else:
                     print('No faces detected')
-                # Send the classification result back to the frontend
-                # await self.send(text_data=json.dumps({
-                #     'classification': f'a frame has been detected',
-                # }))
+
+                # Encode the frame back to a JPEG format
+                _, encoded_frame = cv2.imencode('.jpg', frame)
+                # Convert the encoded frame to a binary blob
+                frame_blob = encoded_frame.tobytes()
+
+                # Send the blob back via WebSocket
+                await self.send(bytes_data=frame_blob)
 
             else:
                 print('No frame detected')
